@@ -1,5 +1,11 @@
+from graph import Graph
+from tetrahedron import tetrahedron
+import networkx as nx
+
 def main():
-    print("Hello from holonomy!")
+    tetrahedron_graph = Graph.from_network(tetrahedron)
+    for component in nx.connected_components(tetrahedron_graph.representation):
+        print(component)
 
 
 if __name__ == "__main__":

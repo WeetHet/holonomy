@@ -9,4 +9,8 @@ pkgs.mkShell {
     pkgs.python3
     pkgs.npins
   ];
+
+  shellHook = ''
+    source .venv/bin/activate
+  '';
 }

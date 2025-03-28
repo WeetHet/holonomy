@@ -1,7 +1,7 @@
 import numpy as np
 import plotly.graph_objects as go
 
-from graph import Network
+from holonomy.graph import Network
 
 __ALL__ = ["tetrahedron"]
 
@@ -124,4 +124,3 @@ if __name__ == "__main__":
     )
 
     fig.show()
-

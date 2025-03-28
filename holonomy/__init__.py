@@ -1,5 +1,5 @@
-from graph import Graph
-from tetrahedron import tetrahedron
+from holonomy.graph import Graph
+from holonomy.examples.tetrahedron import tetrahedron
 import networkx as nx
 
 def main():

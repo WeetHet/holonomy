@@ -2,15 +2,26 @@
   system ? builtins.currentSystem,
   sources ? import ./npins,
   pkgs ? import sources.nixpkgs { inherit system; },
+  pyproject-nix ? import sources.pyproject-nix { inherit lib; },
+  lib ? pkgs.lib,
 }:
+let
+  project = pyproject-nix.lib.project.loadPyproject { projectRoot = ./.; };
+  python = pkgs.python3;
+  pythonEnv = project.renderers.withPackages { inherit python; };
+in
 pkgs.mkShell {
   packages = [
     pkgs.uv
-    pkgs.python3
+
+    (python.withPackages pythonEnv)
+    pkgs.ruff
+    pkgs.pyright
+
     pkgs.npins
   ];
 
   shellHook = ''
-    source .venv/bin/activate
+    [[ -d .venv ]] && source .venv/bin/activate
   '';
 }

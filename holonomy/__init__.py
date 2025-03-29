@@ -1,6 +1,8 @@
-from holonomy.graph import Graph
-from holonomy.examples.tetrahedron import tetrahedron
 import networkx as nx
+
+from holonomy.examples.tetrahedron import tetrahedron
+from holonomy.graph import Graph
+
 
 def main():
     tetrahedron_graph = Graph.from_network(tetrahedron)

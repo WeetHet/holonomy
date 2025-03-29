@@ -4,13 +4,22 @@ version = "0.1.0"
 description = "Generating and solving holonomy puzzles"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = [
-    "matplotlib>=3.10.1",
-    "networkx>=3.4.2",
-    "numpy~=2.0",
-    "plotly",
-    "ruff>=0.11.2",
-]
+dependencies = ["matplotlib>=3.10.1", "networkx>=3.4.2", "numpy~=2.0"]
+
+[dependency-groups]
+dev = ["plotly>=6.0.1"]
+lint = ["ruff", "pyright"]
+
+[tool.uv]
+default-groups = ["dev", "lint"]
+
+[tool.ruff]
+preview = true
+line-length = 120
+
+[tool.ruff.lint]
+extend-select = ["E", "F", "UP", "B", "SIM", "I"]
+ignore = ["E501"]
 
 [project.scripts]
 holonomy = "holonomy:main"

@@ -1,5 +1,4 @@
 import numpy as np
-import plotly.graph_objects as go
 
 
 def compute_perpendicular_vector(v0, v1, centroid):
@@ -35,66 +34,77 @@ tetrahedron_vertices = np.array([
     [1, 1, 1],
     [-1, -1, 1],
     [-1, 1, -1],
-    [1, -1, -1]
+    [1, -1, -1],
 ]) / np.sqrt(3)
 
-edges = [
-    (0, 1), (0, 2), (0, 3),
-    (1, 2), (1, 3), (2, 3)
-]
+edges = [(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)]
 
 centroid = np.mean(tetrahedron_vertices, axis=0)
 
-fig = go.Figure()
+if __name__ == "__main__":
+    import plotly.graph_objects as go
 
-theta = np.linspace(0, np.pi, 40)
-phi = np.linspace(0, 2 * np.pi, 40)
-theta_grid, phi_grid = np.meshgrid(theta, phi)
+    fig = go.Figure()
 
-R = 1
-x_sphere = R * np.sin(theta_grid) * np.cos(phi_grid)
-y_sphere = R * np.sin(theta_grid) * np.sin(phi_grid)
-z_sphere = R * np.cos(theta_grid)
+    theta = np.linspace(0, np.pi, 40)
+    phi = np.linspace(0, 2 * np.pi, 40)
+    theta_grid, phi_grid = np.meshgrid(theta, phi)
 
-fig.add_trace(go.Surface(
-    x=x_sphere, y=y_sphere, z=z_sphere,
-    colorscale='Blues',
-    opacity=0.3,
-    showscale=False
-))
+    R = 1
+    x_sphere = R * np.sin(theta_grid) * np.cos(phi_grid)
+    y_sphere = R * np.sin(theta_grid) * np.sin(phi_grid)
+    z_sphere = R * np.cos(theta_grid)
 
-for edge in edges:
-    v0, v1 = tetrahedron_vertices[edge[0]], tetrahedron_vertices[edge[1]]
-    curve = sinusoidal_modulation(v0, v1, centroid, amplitude=0.2)
-    fig.add_trace(go.Scatter3d(
-        x=curve[:, 0], y=curve[:, 1], z=curve[:, 2],
-        mode='lines',
-        line=dict(color='green', width=4),
-        name='Period of sin(x)'
-    ))
+    fig.add_trace(
+        go.Surface(
+            x=x_sphere,
+            y=y_sphere,
+            z=z_sphere,
+            colorscale="Blues",
+            opacity=0.3,
+            showscale=False,
+        )
+    )
 
+    for edge in edges:
+        v0, v1 = tetrahedron_vertices[edge[0]], tetrahedron_vertices[edge[1]]
+        curve = sinusoidal_modulation(v0, v1, centroid, amplitude=0.2)
+        fig.add_trace(
+            go.Scatter3d(
+                x=curve[:, 0],
+                y=curve[:, 1],
+                z=curve[:, 2],
+                mode="lines",
+                line=dict(color="green", width=4),
+                name="Period of sin(x)",
+            )
+        )
 
-for edge in edges:
-    v0, v1 = tetrahedron_vertices[edge[0]], tetrahedron_vertices[edge[1]]
-    curve = sinusoidal_modulation(v0, v1, centroid, amplitude=0.2)
-    projected_curve = project_onto_sphere(curve, R)
-    fig.add_trace(go.Scatter3d(
-        x=projected_curve[:, 0], y=projected_curve[:, 1], z=projected_curve[:, 2],
-        mode='lines',
-        line=dict(color='red', width=4),
-        name='Projected edge'
-    ))
+    for edge in edges:
+        v0, v1 = tetrahedron_vertices[edge[0]], tetrahedron_vertices[edge[1]]
+        curve = sinusoidal_modulation(v0, v1, centroid, amplitude=0.2)
+        projected_curve = project_onto_sphere(curve, R)
+        fig.add_trace(
+            go.Scatter3d(
+                x=projected_curve[:, 0],
+                y=projected_curve[:, 1],
+                z=projected_curve[:, 2],
+                mode="lines",
+                line=dict(color="red", width=4),
+                name="Projected edge",
+            )
+        )
 
-fig.update_layout(
-    title="",
-    scene=dict(
-        xaxis=dict(visible=False),
-        yaxis=dict(visible=False),
-        zaxis=dict(visible=False),
-        aspectmode='data'
-    ),
-    margin=dict(l=0, r=0, b=0, t=30),
-    showlegend=False
-)
+    fig.update_layout(
+        title="",
+        scene=dict(
+            xaxis=dict(visible=False),
+            yaxis=dict(visible=False),
+            zaxis=dict(visible=False),
+            aspectmode="data",
+        ),
+        margin=dict(l=0, r=0, b=0, t=30),
+        showlegend=False,
+    )
 
-fig.show()
+    fig.show()

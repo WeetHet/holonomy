@@ -8,7 +8,10 @@
 let
   project = pyproject-nix.lib.project.loadPyproject { projectRoot = ./.; };
   python = pkgs.python3;
-  pythonEnv = project.renderers.withPackages { inherit python; };
+  pythonEnv = project.renderers.withPackages {
+    inherit python;
+    groups = [ "dev" ];
+  };
 in
 pkgs.mkShell {
   packages = [

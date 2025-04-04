@@ -3,6 +3,32 @@ revision = 1
 requires-python = ">=3.10"
 
 [[package]]
+name = "bezier"
+version = "2024.6.20"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/1d/1a/28aa7a72a5029f416c7d04c5cdae1b0b00d1c6c72a986689458e8e586446/bezier-2024.6.20.tar.gz", hash = "sha256:0b46357eb6019f969a583093f66e6b73747d5e41c10d9f3dfe327b2aa43dff8c", size = 354590 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e3/26/6fe7391f422fb18ce258c904cd951f1cedd4e0e13fc4f664b9eec240fc36/bezier-2024.6.20-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:65d12159b919e3076c6a1b90c811b740cb1eb557d250947edb7bbc9a2157490d", size = 1248773 },
+    { url = "https://files.pythonhosted.org/packages/9f/72/055a5a2f3988fe6ab9dad8f9ba6cfa59af0bbddd6972a76a3659b90ec281/bezier-2024.6.20-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:ad7ec863f3fa70bd0774ea49cd8f9ad6310251055ee127917b9b8dce085a9e91", size = 1906400 },
+    { url = "https://files.pythonhosted.org/packages/b6/20/0984381a3c9042810b2f9cf39dedac2acffe0546ded10a56cfa43ec4914b/bezier-2024.6.20-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4b8c081eacc25c840b1991a11961421cdb0ec41906df015db9ff08322cf63486", size = 1924387 },
+    { url = "https://files.pythonhosted.org/packages/db/70/4ecdf9758fd680fdf423051b58ca2e64b6ff4cdd04f62dc1baceed0e0adf/bezier-2024.6.20-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fd1d4776212bdd9aa08ad57fb6a82978d50d0eba6f58f68fad9b83446fe895f3", size = 2499029 },
+    { url = "https://files.pythonhosted.org/packages/88/9d/8a08db203aef6289c174bdc9566a2a7a8ff60e5fabbb8c1170b9ff2261ab/bezier-2024.6.20-cp310-cp310-win_amd64.whl", hash = "sha256:191a3c9081d16b36425cc66297f6a8e4460c1b2d43c2ddcd271014fdf99b1e46", size = 1809884 },
+    { url = "https://files.pythonhosted.org/packages/96/d5/02911e75ada6f740910a7203510920947acec31c7e910c8cac521ce897bc/bezier-2024.6.20-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:c860cc0e777a06cda9afa019824b9f48578b2964b0ae18ea7cbbe9d1a02066b6", size = 1249223 },
+    { url = "https://files.pythonhosted.org/packages/f4/e0/90eeab82f5e5c2c1f63e2ad7bf9ec188e0c699a410f4df1d886bd6a4b1b4/bezier-2024.6.20-cp311-cp311-macosx_14_0_x86_64.whl", hash = "sha256:28c50de2b7bc7afd19b3115e3f8ecad36bc281bf4eafbc335a7651b801dd3544", size = 1907265 },
+    { url = "https://files.pythonhosted.org/packages/aa/81/b22deec7817ebdc2da7c45920687b5697830bc0961c83a1d2a72856b3ac7/bezier-2024.6.20-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:29bbecca56d6d152cd566ba626ceab1a95bbaf05205acf680da6d4d5beb0e87b", size = 2016937 },
+    { url = "https://files.pythonhosted.org/packages/0e/ec/836adeee81afaabd7f41f7bc3840ffc7e8b50ac1b3ffdf6f6894a13cbcd4/bezier-2024.6.20-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3d3205f96f982f0dc45e1776d8995d572e228b0dbeab234c0acf4618a2e8dce0", size = 2592354 },
+    { url = "https://files.pythonhosted.org/packages/70/9b/cab28cdae18f739122905088845f8285f6271af3332e46b051c536804289/bezier-2024.6.20-cp311-cp311-win_amd64.whl", hash = "sha256:ab942ec30c73425d7b7020cbde4e1b7bd7792e914fac585565786b205ef54c94", size = 1810077 },
+    { url = "https://files.pythonhosted.org/packages/0d/4b/dcfed092496f53565d40f7c3846db030babb227d9e25e44c7e1d4371713f/bezier-2024.6.20-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:e18733c1fcf01a08822e6e8a6f86eb6e56067f368e4b09653d25368881765d7d", size = 1246686 },
+    { url = "https://files.pythonhosted.org/packages/03/4d/a71c92270739cba039bc110e0c805c3b2f2c8360d7fac3ec861842443571/bezier-2024.6.20-cp312-cp312-macosx_14_0_x86_64.whl", hash = "sha256:bbe9e09dfee5cd23033aa4caf3b32b3d05d5977604b95b9c4e0220376c3c34b6", size = 1903253 },
+    { url = "https://files.pythonhosted.org/packages/f1/3c/326228895c155a657079ac0094e8a3d225986332cc5b4c838f48ec18fbad/bezier-2024.6.20-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:5199407fb9ad8bbae313dde49119ee33d684c2f81358082edea97345df6f493c", size = 1972128 },
+    { url = "https://files.pythonhosted.org/packages/00/a5/dfa67b0de68ca25f37eeef3b85686f191991e8f20f76fdbde870dacb1c56/bezier-2024.6.20-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:21241b81f75739e2cfb2f705a9bb6e55489cc2d8a1d2a514b68ca55514aa5f09", size = 2556550 },
+    { url = "https://files.pythonhosted.org/packages/11/3c/713170cd340a8fc81cc9acb88a5c371f9aaf43102bcdfec9e543843faee4/bezier-2024.6.20-cp312-cp312-win_amd64.whl", hash = "sha256:8cf8c3e373440f799a48ccdf51bdd6428ceef5e1dd9bae9eb01711a0a73b8fdc", size = 1802892 },
+]
+
+[[package]]
 name = "contourpy"
 version = "1.3.1"
 source = { registry = "https://pypi.org/simple" }
@@ -121,6 +147,7 @@ name = "holonomy"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "bezier" },
     { name = "matplotlib" },
     { name = "networkx" },
     { name = "numpy" },
@@ -137,6 +164,7 @@ lint = [
 
 [package.metadata]
 requires-dist = [
+    { name = "bezier", specifier = ">=2024.6.20" },
     { name = "matplotlib", specifier = ">=3.10.1" },
     { name = "networkx", specifier = ">=3.4.2" },
     { name = "numpy", specifier = "~=2.0" },

@@ -9,10 +9,11 @@ dependencies = [
     "matplotlib>=3.10.1",
     "networkx>=3.4.2",
     "numpy~=2.0",
+    "plotly>=6.0.1",
 ]
 
 [dependency-groups]
-dev = ["plotly>=6.0.1"]
+dev = []
 lint = ["ruff", "pyright"]
 
 [tool.uv]
@@ -28,6 +29,7 @@ ignore = ["E501"]
 
 [project.scripts]
 holonomy = "holonomy:main"
+visualise = "holonomy.visualise.graph:main"
 
 [build-system]
 requires = ["flit-core>=3.4,<4"]

@@ -1,4 +1,5 @@
 import numpy as np
+import plotly.graph_objects as go
 
 from holonomy.graph import Network
 
@@ -56,8 +57,6 @@ tetrahedron = Network(
 )
 
 if __name__ == "__main__":
-    import plotly.graph_objects as go
-
     fig = go.Figure()
 
     fig.add_trace(

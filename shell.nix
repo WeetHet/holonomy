@@ -25,10 +25,20 @@ let
       pkgs.pyright
     ];
   };
+  relaxedDeps.pythonRelaxDeps = [ "plotly" ];
+  holonomy = python.pkgs.buildPythonPackage (
+    relaxedDeps
+    // project.renderers.buildPythonPackage {
+      inherit python;
+      groups = [ "dev" ];
+    }
+  );
 in
 pkgs.mkShell {
   packages = [
     pkgs.uv
+
+    holonomy
 
     pythonDrv
     pkgs.ruff

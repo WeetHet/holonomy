@@ -13,6 +13,7 @@ def visualize_graph(
     scale_factor=0.3,
     show_network=True,
     show_graph=True,
+    nesting_type="circle",
     network_color="red",
     graph_color="purple",
 ):
@@ -31,16 +32,17 @@ def visualize_graph(
     y_sphere = R * np.sin(theta_grid) * np.sin(phi_grid)
     z_sphere = R * np.cos(theta_grid)
 
-    fig.add_trace(
-        go.Surface(
-            x=x_sphere,
-            y=y_sphere,
-            z=z_sphere,
-            colorscale="Blues",
-            opacity=0.2,
-            showscale=False,
+    if show_network:
+        fig.add_trace(
+            go.Surface(
+                x=x_sphere,
+                y=y_sphere,
+                z=z_sphere,
+                colorscale="Blues",
+                opacity=0.2,
+                showscale=False,
+            )
         )
-    )
 
     nested_coords = {}
 
@@ -49,7 +51,13 @@ def visualize_graph(
         directions = network.directions(vertex)
 
         for direction in range(kind):
-            nested_coord = base_coord * (1 - scale_factor) + directions[direction] * scale_factor
+            match nesting_type:
+                case "circle":
+                    nested_coord = base_coord * (1 - scale_factor) + directions[direction] * scale_factor
+                case "embed":
+                    nested_coord = base_coord * (0.1 + (direction + 1) / kind * (0.9 - scale_factor))
+                case _:
+                    raise ValueError(f"Invalid nesting type: {nesting_type}. Supported types are 'circle' and 'embed'.")
             nested_coords[(vertex, direction)] = nested_coord
 
     nested_x, nested_y, nested_z, nested_text = [], [], [], []
@@ -151,12 +159,12 @@ def visualize_graph(
     return fig
 
 
-def visualize_network_and_graph(network: Network, scale_factor=0.3):
+def visualize_network_and_graph(network: Network, nesting_type="circle", scale_factor=0.3):
     graph = Graph.from_network(network)
-    return visualize_graph(graph, scale_factor=scale_factor)
+    return visualize_graph(graph, nesting_type=nesting_type, scale_factor=scale_factor)
 
 
-def compare_views(network: Network, scale_factor=0.3):
+def compare_views(network: Network, nesting_type="circle", scale_factor=0.3):
     graph = Graph.from_network(network)
 
     fig = make_subplots(
@@ -166,11 +174,11 @@ def compare_views(network: Network, scale_factor=0.3):
         subplot_titles=("Original Network", "Graph Representation"),
     )
 
-    network_fig = visualize_graph(graph, scale_factor=0, show_graph=False, show_network=True)
+    network_fig = visualize_graph(graph, nesting_type=nesting_type, scale_factor=0, show_graph=False, show_network=True)
     for trace in network_fig.data:
         fig.add_trace(trace, row=1, col=1)
 
-    graph_fig = visualize_graph(graph, scale_factor=scale_factor, show_network=False)
+    graph_fig = visualize_graph(graph, nesting_type=nesting_type, scale_factor=scale_factor, show_network=False)
     for trace in graph_fig.data:
         fig.add_trace(trace, row=1, col=2)
 
@@ -185,11 +193,13 @@ def compare_views(network: Network, scale_factor=0.3):
 
 def main():
     network = octahedron
+    nesting_type = "embed"
+    scale_factor = 0.1
 
-    fig = visualize_network_and_graph(network, scale_factor=0.3)
+    fig = visualize_network_and_graph(network, nesting_type=nesting_type, scale_factor=scale_factor)
     fig.show()
 
-    compare_fig = compare_views(network, scale_factor=0.3)
+    compare_fig = compare_views(network, nesting_type=nesting_type, scale_factor=scale_factor)
     compare_fig.show()
 
 

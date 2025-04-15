@@ -1,5 +1,6 @@
 import itertools
 from dataclasses import dataclass
+from typing import Self
 
 import networkx as nx
 import numpy as np
@@ -40,7 +41,7 @@ class Graph:
     representation: nx.Graph
 
     @classmethod
-    def from_network(cls, network: Network) -> "Graph":
+    def from_network(cls, network: Network) -> Self:
         representation = nx.Graph()
         representation.add_nodes_from(itertools.product(range(network.vertex_count), range(network.kind)))
 

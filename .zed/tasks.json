@@ -1,0 +1,10 @@
+[
+  {
+    "label": "Run visualise",
+    "command": "python3 -m holonomy.visualise.graph"
+  },
+  {
+    "label": "Run octahedron",
+    "command": "python3 -m holonomy.examples.octahedron"
+  }
+]

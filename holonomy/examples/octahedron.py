@@ -1,3 +1,5 @@
+import itertools
+
 import numpy as np
 import plotly.graph_objects as go
 
@@ -47,9 +49,13 @@ for i, p in enumerate(principal_vector):
     p /= np.linalg.norm(p)
     principal_vector[i] = p
 
+place_pegs_left = [(0, 4)]
+place_pegs_right = [(0, 4)]
+
 octahedron = Network(
     vertex_count=6,
     paths=arcs,
+    pegs=[(arcs[i][:2] in place_pegs_left, arcs[i][:2] in place_pegs_right) for i in range(len(arcs))],
     coords=octahedron_vertices,
     principal_vector=np.array(principal_vector),
     normal_vector=octahedron_vertices,
@@ -78,6 +84,34 @@ if __name__ == "__main__":
                 z=arc[:, 2],
                 mode="lines",
                 line=dict(color="red", width=5),
+            )
+        )
+
+    coeff_left = zip(itertools.repeat(1), place_pegs_left)
+    coeff_right = zip(itertools.repeat(-1), place_pegs_right)
+    for c, (u, v) in itertools.chain(coeff_left, coeff_right):
+        arc = next((arc for arc in arcs if arc[:2] == (u, v)), None)
+        assert arc is not None, f"Attemted to place a peg at ({u}, {v}) but this path doesn't exist"
+        _, _, path = arc
+        mid_idx = len(path) // 2
+        midpoint, nxt = path[mid_idx], path[mid_idx + 1]
+        mid_vector = nxt - midpoint
+
+        mp = np.cross(midpoint, mid_vector)
+        mp = mp / np.linalg.norm(mp)
+
+        peg_distance = 0.1
+        point = midpoint + c * mp * peg_distance
+
+        up, down = point * 1.1, point * 0.9
+
+        fig.add_trace(
+            go.Scatter3d(
+                x=np.array([up[0], down[0]]),
+                y=np.array([up[1], down[1]]),
+                z=np.array([up[2], down[2]]),
+                mode="lines",
+                line=dict(color="green", width=5),
             )
         )
 

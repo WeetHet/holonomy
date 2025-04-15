@@ -9,6 +9,7 @@ import numpy as np
 class Network:
     vertex_count: int
     paths: list[tuple[int, int, np.ndarray]]
+    pegs: list[tuple[bool, bool]]
     coords: np.ndarray
     principal_vector: np.ndarray
     normal_vector: np.ndarray
@@ -44,10 +45,19 @@ class Graph:
         representation.add_nodes_from(itertools.product(range(network.vertex_count), range(network.kind)))
 
         for direction in range(network.kind):
-            for v_from, v_to, path in filter(lambda p: len(p[2]) >= 2, network.paths):
+            for pegs, (v_from, v_to, path) in (
+                (pegs, path) for (pegs, path) in zip(network.pegs, network.paths, strict=True) if len(path[2]) > 1
+            ):
                 first, last = path[1] - path[0], path[-1] - path[-2]
                 dir_first, dir_last = network.direction(v_from, first), network.direction(v_to, last)
                 new_direction = (direction - dir_first + dir_last) % network.kind
+
+                rot_first = (direction - dir_first + network.kind) % network.kind
+                check_left = 0 < rot_first < network.kind // 2
+                check_right = rot_first > network.kind // 2
+                if (check_left and pegs[0]) or (check_right and pegs[1]):
+                    continue
+
                 representation.add_edge((v_from, direction), (v_to, new_direction))
 
         return cls(network, representation)

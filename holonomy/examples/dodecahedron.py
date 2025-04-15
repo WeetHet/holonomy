@@ -97,6 +97,7 @@ for i, p in enumerate(principal_vector):
 dodecahedron = Network(
     vertex_count=20,
     paths=arcs,
+    pegs=[(False, False) for _ in range(len(arcs))],
     coords=dodecahedron_vertices,
     principal_vector=np.array(principal_vector),
     normal_vector=dodecahedron_vertices,

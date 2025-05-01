@@ -45,6 +45,7 @@ pkgs.mkShell {
     pkgs.pyright
 
     pkgs.npins
+    pkgs.koji
   ];
 
   shellHook = ''

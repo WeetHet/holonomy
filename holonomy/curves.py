@@ -1,6 +1,7 @@
+from typing import Any
+
 import bezier
 import numpy as np
-from typing import Any
 import scipy
 
 
@@ -14,8 +15,8 @@ def curvature(points: np.ndarray) -> np.floating[Any]:
 
 
 def cubic_bezier_connect(
-    start: (np.ndarray, np.ndarray),
-    end: (np.ndarray, np.ndarray),
+    start: tuple[np.ndarray, np.ndarray],
+    end: tuple[np.ndarray, np.ndarray],
     num_points: int = 100,
 ) -> np.ndarray:
     p0, d0 = start
@@ -36,8 +37,7 @@ def cubic_bezier_connect(
 
         curvature_values = curvature(points)
         maximum_curvature = np.max(curvature_values)
-        return maximum_curvature
-
+        return float(maximum_curvature)
 
     res = scipy.optimize.direct(
         objective,

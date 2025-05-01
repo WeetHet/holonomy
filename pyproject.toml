@@ -10,6 +10,7 @@ dependencies = [
     "networkx>=3.4.2",
     "numpy~=2.0",
     "plotly>=6.0.1",
+    "scipy>=1.15.2",
 ]
 
 [dependency-groups]

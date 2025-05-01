@@ -1,5 +1,4 @@
 import numpy as np
-import plotly.graph_objects as go
 
 from holonomy.graph import Network
 
@@ -57,82 +56,3 @@ tetrahedron = Network(
     normal_vector=tetrahedron_vertices,
     kind=6,
 )
-
-if __name__ == "__main__":
-    fig = go.Figure()
-
-    fig.add_trace(
-        go.Surface(
-            x=x_sphere,
-            y=y_sphere,
-            z=z_sphere,
-            colorscale="Blues",
-            opacity=0.3,
-            showscale=False,
-        )
-    )
-
-    faces = [[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]]
-    for face in faces:
-        x_tet = [tetrahedron_vertices[i, 0] for i in face] + [tetrahedron_vertices[face[0], 0]]
-        y_tet = [tetrahedron_vertices[i, 1] for i in face] + [tetrahedron_vertices[face[0], 1]]
-        z_tet = [tetrahedron_vertices[i, 2] for i in face] + [tetrahedron_vertices[face[0], 2]]
-
-        fig.add_trace(
-            go.Scatter3d(
-                x=x_tet,
-                y=y_tet,
-                z=z_tet,
-                mode="lines",
-                line=dict(color="green", width=5),
-            )
-        )
-
-    for _, _, arc in arcs:
-        fig.add_trace(
-            go.Scatter3d(
-                x=arc[:, 0],
-                y=arc[:, 1],
-                z=arc[:, 2],
-                mode="lines",
-                line=dict(color="red", width=5),
-            )
-        )
-
-    for i, pvec in enumerate(principal_vector):
-        vertex = tetrahedron_vertices[i]
-        to = vertex + pvec * 0.3
-        fig.add_trace(
-            go.Scatter3d(
-                x=np.array([vertex[0], to[0]]),
-                y=np.array([vertex[1], to[1]]),
-                z=np.array([vertex[2], to[2]]),
-                mode="lines",
-                line=dict(color="blue", width=5),
-            )
-        )
-
-    fig.add_trace(
-        go.Scatter3d(
-            x=tetrahedron_vertices[:, 0],
-            y=tetrahedron_vertices[:, 1],
-            z=tetrahedron_vertices[:, 2],
-            mode="text",
-            text=[f"{i}" for i in range(4)],
-            textposition="top center",
-            textfont=dict(size=16, color="black"),
-            hoverinfo="skip",
-        )
-    )
-
-    fig.update_layout(
-        title="",
-        scene=dict(
-            xaxis=dict(visible=False),
-            yaxis=dict(visible=False),
-            zaxis=dict(visible=False),
-        ),
-        margin=dict(l=0, r=0, b=0, t=0),
-    )
-
-    fig.show()

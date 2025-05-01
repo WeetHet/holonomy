@@ -5,7 +5,7 @@ from holonomy.graph import Graph
 
 
 def main():
-    tetrahedron_graph = Graph.from_network(tetrahedron)
+    tetrahedron_graph = Graph.from_network(tetrahedron, legs=[0])
     for component in nx.connected_components(tetrahedron_graph.representation):
         print(component)
 

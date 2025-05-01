@@ -1,4 +1,5 @@
 import itertools
+from collections.abc import Iterable
 from dataclasses import dataclass
 from typing import Self
 
@@ -41,24 +42,30 @@ class Graph:
     representation: nx.Graph
 
     @classmethod
-    def from_network(cls, network: Network) -> Self:
+    def from_network(cls, network: Network, legs: Iterable[int] = ()) -> Self:
+        assert all(0 <= leg < network.kind for leg in legs), f"All legs should be in ({0}..<{network.kind}) range"
         representation = nx.Graph()
         representation.add_nodes_from(itertools.product(range(network.vertex_count), range(network.kind)))
 
         for direction in range(network.kind):
-            for pegs, (v_from, v_to, path) in (
+            paths_with_pegs = (
                 (pegs, path) for (pegs, path) in zip(network.pegs, network.paths, strict=True) if len(path[2]) > 1
-            ):
+            )
+            for pegs, (v_from, v_to, path) in paths_with_pegs:
                 first, last = path[1] - path[0], path[-1] - path[-2]
                 dir_first, dir_last = network.direction(v_from, first), network.direction(v_to, last)
                 new_direction = (direction - dir_first + dir_last) % network.kind
 
-                rot_first = (direction - dir_first + network.kind) % network.kind
-                check_left = 0 < rot_first < network.kind // 2
-                check_right = rot_first > network.kind // 2
-                if (check_left and pegs[0]) or (check_right and pegs[1]):
-                    continue
+                skip_edge = False
+                for leg in legs:
+                    rot_first = (leg + direction - dir_first) % network.kind
+                    check_left = 0 < rot_first < network.kind // 2
+                    check_right = rot_first > network.kind // 2
+                    if (check_left and pegs[0]) or (check_right and pegs[1]):
+                        skip_edge = True
+                        break
 
-                representation.add_edge((v_from, direction), (v_to, new_direction))
+                if not skip_edge:
+                    representation.add_edge((v_from, direction), (v_to, new_direction))
 
         return cls(network, representation)

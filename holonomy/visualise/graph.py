@@ -160,7 +160,7 @@ def visualize_graph(
 
 
 def visualize_network_and_graph(network: Network, nesting_type="circle", scale_factor=0.3):
-    graph = Graph.from_network(network)
+    graph = Graph.from_network(network, legs=[0])
     return visualize_graph(graph, nesting_type=nesting_type, scale_factor=scale_factor)
 
 
@@ -193,7 +193,7 @@ def compare_views(network: Network, nesting_type="circle", scale_factor=0.3):
 
 def main():
     network = octahedron
-    nesting_type = "embed"
+    nesting_type = "circle"
     scale_factor = 0.1
 
     fig = visualize_network_and_graph(network, nesting_type=nesting_type, scale_factor=scale_factor)

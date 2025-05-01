@@ -51,6 +51,7 @@ tetrahedron = Network(
     vertex_count=4,
     paths=arcs,
     pegs=[(False, False) for _ in range(len(arcs))],
+    start=(0, 0),
     coords=tetrahedron_vertices,
     principal_vector=np.array(principal_vector),
     normal_vector=tetrahedron_vertices,

@@ -12,6 +12,7 @@ class Network:
     vertex_count: int
     paths: list[tuple[int, int, np.ndarray]]
     pegs: list[tuple[bool, bool]]
+    start: tuple[int, int]  # starting vertex, starting direction
     coords: np.ndarray
     principal_vector: np.ndarray
     normal_vector: np.ndarray
@@ -34,6 +35,10 @@ class Network:
 
         ds = self.directions(vertex)
         return int(np.argmax(np.dot(ds, vector)))
+
+    def solve(self):
+        graph = Graph.from_network(self, legs=(0, 1))
+        return graph.solve()
 
 
 @dataclass
@@ -69,3 +74,13 @@ class Graph:
                     representation.add_edge((v_from, direction), (v_to, new_direction))
 
         return cls(network, representation)
+
+    def solve(self) -> list[tuple[int, int]] | None:
+        graph = self.representation
+
+        vertex, direction = self.network.start
+        source, target = (vertex, direction), (vertex, (direction + 1) % self.network.kind)
+        if not nx.has_path(graph, source, target):
+            return None
+        path = nx.shortest_path(graph, source, target)
+        return path

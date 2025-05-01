@@ -56,6 +56,7 @@ octahedron = Network(
     vertex_count=6,
     paths=arcs,
     pegs=[(arcs[i][:2] in place_pegs_left, arcs[i][:2] in place_pegs_right) for i in range(len(arcs))],
+    start=(0, 0),
     coords=octahedron_vertices,
     principal_vector=np.array(principal_vector),
     normal_vector=octahedron_vertices,

@@ -53,6 +53,7 @@ cube = Network(
     vertex_count=8,
     paths=arcs,
     pegs=[(False, False) for _ in range(len(arcs))],
+    start=(0, 0),
     coords=cube_vertices,
     principal_vector=np.array(principal_vector),
     normal_vector=cube_vertices,

@@ -1,3 +1,5 @@
+import itertools
+
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -13,6 +15,8 @@ def visualize_graph(
     scale_factor=0.3,
     show_network=True,
     show_graph=True,
+    show_principal_vector=True,
+    show_pegs=True,
     nesting_type="circle",
     network_color="red",
     graph_color="purple",
@@ -128,24 +132,61 @@ def visualize_graph(
             )
         )
 
-        for vertex in range(vertex_count):
-            base_coord = network.coords[vertex]
-            directions = network.directions(vertex)
-            first_direction = directions[0] * 0.5
-            end_coord = base_coord + first_direction
+        if show_principal_vector:
+            for vertex in range(vertex_count):
+                base_coord = network.coords[vertex]
+                directions = network.directions(vertex)
+                first_direction = directions[0] * 0.5
+                end_coord = base_coord + first_direction
 
-            fig.add_trace(
-                go.Scatter3d(
-                    x=[base_coord[0], end_coord[0]],
-                    y=[base_coord[1], end_coord[1]],
-                    z=[base_coord[2], end_coord[2]],
-                    mode="lines",
-                    line=dict(color="blue", width=3),
-                    hoverinfo="none",
-                    name="Principal vector" if vertex == 0 else None,
-                    showlegend=vertex == 0,
+                fig.add_trace(
+                    go.Scatter3d(
+                        x=[base_coord[0], end_coord[0]],
+                        y=[base_coord[1], end_coord[1]],
+                        z=[base_coord[2], end_coord[2]],
+                        mode="lines",
+                        line=dict(color="blue", width=3),
+                        hoverinfo="none",
+                        name="Principal vector" if vertex == 0 else None,
+                        showlegend=vertex == 0,
+                    )
                 )
-            )
+
+        if show_pegs:
+            place_pegs_left, place_pegs_right = [], []
+            for (u, v, _), (left, right) in zip(network.paths, network.pegs, strict=True):
+                if left:
+                    place_pegs_left.append((u, v))
+                if right:
+                    place_pegs_right.append((u, v))
+
+            coeff_left = zip(itertools.repeat(1), place_pegs_left)
+            coeff_right = zip(itertools.repeat(-1), place_pegs_right)
+            for c, (u, v) in itertools.chain(coeff_left, coeff_right):
+                arc = next((arc for arc in network.paths if arc[:2] == (u, v)), None)
+                assert arc is not None, f"Attemted to place a peg at ({u}, {v}) but this path doesn't exist"
+                _, _, path = arc
+                mid_idx = len(path) // 2
+                midpoint, nxt = path[mid_idx], path[mid_idx + 1]
+                mid_vector = nxt - midpoint
+
+                mp = np.cross(midpoint, mid_vector)
+                mp = mp / np.linalg.norm(mp)
+
+                peg_distance = 0.1
+                point = midpoint + c * mp * peg_distance
+
+                up, down = point * 1.1, point * 0.9
+
+                fig.add_trace(
+                    go.Scatter3d(
+                        x=np.array([up[0], down[0]]),
+                        y=np.array([up[1], down[1]]),
+                        z=np.array([up[2], down[2]]),
+                        mode="lines",
+                        line=dict(color="green", width=5),
+                    )
+                )
 
     fig.update_layout(
         scene=dict(
@@ -164,7 +205,13 @@ def visualize_network_and_graph(network: Network, nesting_type="circle", scale_f
     return visualize_graph(graph, nesting_type=nesting_type, scale_factor=scale_factor)
 
 
-def compare_views(network: Network, nesting_type="circle", scale_factor=0.3):
+def compare_views(
+    network: Network,
+    nesting_type="circle",
+    scale_factor=0.3,
+    show_principal_vector=True,
+    show_pegs=True,
+):
     graph = Graph.from_network(network)
 
     fig = make_subplots(
@@ -174,11 +221,26 @@ def compare_views(network: Network, nesting_type="circle", scale_factor=0.3):
         subplot_titles=("Original Network", "Graph Representation"),
     )
 
-    network_fig = visualize_graph(graph, nesting_type=nesting_type, scale_factor=0, show_graph=False, show_network=True)
+    network_fig = visualize_graph(
+        graph,
+        nesting_type=nesting_type,
+        scale_factor=0,
+        show_graph=False,
+        show_network=True,
+        show_pegs=show_pegs,
+        show_principal_vector=show_principal_vector,
+    )
     for trace in network_fig.data:
         fig.add_trace(trace, row=1, col=1)
 
-    graph_fig = visualize_graph(graph, nesting_type=nesting_type, scale_factor=scale_factor, show_network=False)
+    graph_fig = visualize_graph(
+        graph,
+        nesting_type=nesting_type,
+        scale_factor=scale_factor,
+        show_network=False,
+        show_pegs=show_pegs,
+        show_principal_vector=show_principal_vector,
+    )
     for trace in graph_fig.data:
         fig.add_trace(trace, row=1, col=2)
 

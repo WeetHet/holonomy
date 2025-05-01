@@ -98,6 +98,7 @@ dodecahedron = Network(
     vertex_count=20,
     paths=arcs,
     pegs=[(False, False) for _ in range(len(arcs))],
+    start=(0, 0),
     coords=dodecahedron_vertices,
     principal_vector=np.array(principal_vector),
     normal_vector=dodecahedron_vertices,

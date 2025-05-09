@@ -44,7 +44,10 @@ if __name__ == "__main__":
     )
     fig.show()
 
-    print(network.solve())
+    solution = network.solve()
+    assert solution is not None
+
+    print(f"Solution is {solution}, of length {len(solution)}")
 
     graph = Graph.from_network(network, legs=(0, 1))
     pos = nx.kamada_kawai_layout(graph.representation, scale=2)

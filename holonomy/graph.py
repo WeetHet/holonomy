@@ -18,6 +18,21 @@ class Network:
     normal_vector: np.ndarray
     kind: int
 
+    def __post_init__(self):
+        start_v, start_dir = self.start
+        start_dir_inv = (start_dir + self.kind // 2) % self.kind
+
+        new_paths, new_pegs = [], []
+        for (u, v, path), pegs in zip(self.paths, self.pegs, strict=True):
+            path_dir = self.direction(u, path[-1] - path[-2])
+            if (v == start_v and path_dir == start_dir) or (u == start_v and path_dir == start_dir_inv):
+                continue
+            new_paths.append((u, v, path))
+            new_pegs.append(pegs)
+
+        self.paths = new_paths
+        self.pegs = new_pegs
+
     def directions(self, vertex: int) -> np.ndarray:
         m0, n = self.principal_vector[vertex], self.normal_vector[vertex]
         mp = np.cross(n, m0)

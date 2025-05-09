@@ -4,3 +4,4 @@
 /.venv
 /.python-env
 /.envrc
+/.ruff_cache

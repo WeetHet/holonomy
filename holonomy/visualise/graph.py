@@ -7,6 +7,7 @@ from plotly.subplots import make_subplots
 from holonomy.examples.dodecahedron import dodecahedron  # noqa: F401
 from holonomy.examples.octahedron import octahedron  # noqa: F401
 from holonomy.examples.tetrahedron import tetrahedron  # noqa: F401
+from holonomy.examples.truncated_tetrahedron import truncated_tetrahedron  # noqa: F401
 from holonomy.graph import Graph, Network
 
 

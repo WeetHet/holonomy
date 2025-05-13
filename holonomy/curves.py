@@ -49,4 +49,6 @@ def cubic_bezier_connect(
     p2 = p3 + beta_opt * d3
     points = np.stack([p0, p1, p2, p3], axis=1)
     curve = bezier.Curve(np.asfortranarray(points), degree=3)
-    return curve.evaluate_multi(np.linspace(0, 1, num_points)).T
+    points = curve.evaluate_multi(np.linspace(0, 1, num_points)).T
+    points /= np.linalg.norm(points, axis=1, keepdims=True)
+    return points

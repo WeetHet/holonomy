@@ -1,0 +1,11 @@
+[
+  {
+    "label": "Debug generate",
+    "adapter": "python",
+    "request": "launch",
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "initialize_args": {
+      "module": "holonomy.generate.__init__"
+    }
+  }
+]

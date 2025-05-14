@@ -8,6 +8,7 @@ from more_itertools import pairwise
 
 from holonomy.examples.dodecahedron import dodecahedron  # noqa: F401
 from holonomy.examples.octahedron import octahedron  # noqa: F401
+from holonomy.examples.square_antiprism import square_antiprism  # noqa: F401
 from holonomy.graph import Graph, Network
 from holonomy.visualise.graph import compare_views
 
@@ -69,7 +70,7 @@ def generate_pegs(network: Network, min_length: int = 0, max_iterations: int = 1
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     network = generate_pegs(
-        copy.deepcopy(dodecahedron),
+        copy.deepcopy(square_antiprism),
         min_length=5,
     )
 
@@ -82,13 +83,11 @@ if __name__ == "__main__":
     fig.show()
 
     solution = network.solve()
-    assert solution is not None
-
-    print(f"Solution is {solution}, of length {len(solution)}")
-
     graph = Graph.from_network(network, legs=(0, 1))
 
-    print(f"Stats: {len(path_bridges(graph.representation, solution))=}")
+    if solution is not None:
+        print(f"Solution is {solution}, of length {len(solution)}")
+        print(f"Stats: {len(path_bridges(graph.representation, solution))=}")
 
     pos = nx.kamada_kawai_layout(graph.representation, scale=2)
     pos = nx.spring_layout(graph.representation, pos=pos, k=0.5)

@@ -1,16 +1,7 @@
 import numpy as np
 
+from holonomy.curves import spherical_interpolation
 from holonomy.graph import Network
-
-
-def spherical_interpolation(v0, v1, num_points=30):
-    arc_points = []
-    for t in np.linspace(0, 1, num_points):
-        p = (1 - t) * v0 + t * v1
-        p /= np.linalg.norm(p)
-        arc_points.append(p)
-    return np.array(arc_points)
-
 
 R = 1
 octahedron_vertices = np.array([

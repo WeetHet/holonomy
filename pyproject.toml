@@ -6,12 +6,15 @@ readme = "README.md"
 requires-python = ">=3.11,<3.13"
 dependencies = [
     "bezier>=2024.6.20",
+    "manifold3d>=3.0.1",
     "matplotlib>=3.10.1",
     "more-itertools>=10.6.0",
     "networkx>=3.4.2",
     "numpy~=2.0",
     "plotly>=6.0.1",
+    "pyglet<2",
     "scipy>=1.15.2",
+    "trimesh>=4.6.8",
 ]
 
 [dependency-groups]

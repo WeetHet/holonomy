@@ -5,6 +5,15 @@ import numpy as np
 import scipy
 
 
+def spherical_interpolation(v0, v1, num_points=30):
+    arc_points = []
+    for t in np.linspace(0, 1, num_points):
+        p = (1 - t) * v0 + t * v1
+        p /= np.linalg.norm(p)
+        arc_points.append(p)
+    return np.array(arc_points)
+
+
 def curvature(points: np.ndarray) -> np.floating[Any]:
     dp = (points[2:] - points[:-2]) / 2
     ddp = points[2:] + points[:-2] - 2 * points[1:-1]

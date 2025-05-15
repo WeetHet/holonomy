@@ -1,11 +1,9 @@
 [
   {
     "label": "Debug generate",
-    "adapter": "python",
+    "adapter": "Debugpy",
     "request": "launch",
     "cwd": "$ZED_WORKTREE_ROOT",
-    "initialize_args": {
-      "module": "holonomy.generate.__init__"
-    }
+    "program": "holonomy/generate/model3d.py"
   }
 ]

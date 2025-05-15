@@ -1,3 +1,4 @@
+import copy
 import itertools
 from collections.abc import Iterable
 from dataclasses import dataclass
@@ -17,21 +18,6 @@ class Network:
     principal_vector: np.ndarray
     normal_vector: np.ndarray
     kind: int
-
-    def __post_init__(self):
-        start_v, start_dir = self.start
-        start_dir_inv = (start_dir + self.kind // 2) % self.kind
-
-        new_paths, new_pegs = [], []
-        for (u, v, path), pegs in zip(self.paths, self.pegs, strict=True):
-            path_dir = self.direction(u, path[-1] - path[-2])
-            if (v == start_v and path_dir == start_dir) or (u == start_v and path_dir == start_dir_inv):
-                continue
-            new_paths.append((u, v, path))
-            new_pegs.append(pegs)
-
-        self.paths = new_paths
-        self.pegs = new_pegs
 
     def directions(self, vertex: int) -> np.ndarray:
         m0, n = self.principal_vector[vertex], self.normal_vector[vertex]
@@ -62,8 +48,28 @@ class Graph:
     representation: nx.Graph
 
     @classmethod
+    def clean_network(cls, network: Network) -> Network:
+        network = copy.deepcopy(network)
+        start_v, start_dir = network.start
+        start_dir_inv = (start_dir + network.kind // 2) % network.kind
+
+        new_paths, new_pegs = [], []
+        for (u, v, path), pegs in zip(network.paths, network.pegs, strict=True):
+            path_dir = network.direction(u, path[-1] - path[-2])
+            if (v == start_v and path_dir == start_dir) or (u == start_v and path_dir == start_dir_inv):
+                continue
+            new_paths.append((u, v, path))
+            new_pegs.append(pegs)
+
+        network.paths = new_paths
+        network.pegs = new_pegs
+        return network
+
+    @classmethod
     def from_network(cls, network: Network, legs: Iterable[int] = ()) -> Self:
         assert all(0 <= leg < network.kind for leg in legs), f"All legs should be in ({0}..<{network.kind}) range"
+
+        network = cls.clean_network(network)
         representation = nx.Graph()
         representation.add_nodes_from(itertools.product(range(network.vertex_count), range(network.kind)))
 

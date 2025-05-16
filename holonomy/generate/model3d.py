@@ -20,6 +20,7 @@ class SectionConfig:
     def __iter__(self):
         return iter(astuple(self))
 
+
 @dataclass
 class PegsConfig:
     height: float
@@ -144,7 +145,6 @@ def add_pegs(network: Network, pegs_config: PegsConfig, section_config: SectionC
     height = pegs_config.height
 
     for (has_left, has_right), (_, _, path) in zip(network.pegs, network.paths, strict=True):
-
         mid_point = path[len(path) // 2]
 
         tangent = compute_tangents(path)[len(path) // 2]

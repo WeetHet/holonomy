@@ -15,6 +15,7 @@
         "*.md"
         "nix"
         "*.png"
+        "*.lock"
       ];
       formatter.ruff-check.priority = 1;
       formatter.ruff-format.priority = 2;

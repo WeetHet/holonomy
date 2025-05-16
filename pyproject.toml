@@ -13,7 +13,9 @@ dependencies = [
   "numpy~=2.0",
   "plotly>=6.0.1",
   "pyglet<2",
+  "rtree>=1.4.0",
   "scipy>=1.15.2",
+  "tqdm>=4.67.1",
   "trimesh>=4.6.8",
 ]
 

@@ -20,6 +20,14 @@ class SectionConfig:
     def __iter__(self):
         return iter(astuple(self))
 
+@dataclass
+class PegsConfig:
+    height: float
+    radius: float
+
+    def __iter__(self):
+        return iter(astuple(self))
+
 
 def create_groove_section(parameters: SectionConfig) -> np.ndarray:
     h, w, g_h, g_w, bn_h, bn_w = parameters
@@ -129,8 +137,43 @@ def cylinder_intersections(config: SectionConfig, network: Network) -> list[trim
     return cylinders
 
 
+def add_pegs(network: Network, pegs_config: PegsConfig, section_config: SectionConfig) -> list[trimesh.Trimesh]:
+    peg_meshes = []
+    offset_distance = section_config.width / 2
+    radius = float(pegs_config.radius)
+    height = pegs_config.height
+
+    for (has_left, has_right), (_, _, path) in zip(network.pegs, network.paths, strict=True):
+
+        mid_point = path[len(path) // 2]
+
+        tangent = compute_tangents(path)[len(path) // 2]
+        normal = mid_point / np.linalg.norm(mid_point)
+
+        side_vector = np.cross(normal, tangent)
+        side_vector /= np.linalg.norm(side_vector)
+
+        for direction, present in zip([-1, 1], [has_left, has_right], strict=True):
+            if not present:
+                continue
+
+            peg_center = mid_point + direction * offset_distance * side_vector
+
+            peg = trimesh.creation.cylinder(radius=radius, height=height, sections=network.kind)
+            align_matrix = trimesh.geometry.align_vectors([0, 0, 1], normal)
+            peg.apply_transform(align_matrix)
+
+            translation = trimesh.transformations.translation_matrix(peg_center)
+            peg.apply_transform(translation)
+
+            peg_meshes.append(peg)
+
+    return peg_meshes
+
+
 if __name__ == "__main__":
     network = tetrahedron
+    network.pegs = [(True, True) for _ in range(len(network.paths))]
 
     sphere = trimesh.creation.icosphere(subdivisions=4, radius=0.98)
     config = SectionConfig(
@@ -141,10 +184,14 @@ if __name__ == "__main__":
         bottleneck_height=0.08,
         bottleneck_width=0.16,
     )
+
+    pegs_config = PegsConfig(height=0.1, radius=0.05)
+    peg_meshes = add_pegs(network, pegs_config, config)
+    sphere = trimesh.boolean.union([sphere, *peg_meshes])
     section = create_groove_section(config)
     grooves = construct_grooves(network, section)
 
     cylinders = cylinder_intersections(config, network)
-    sphere = trimesh.boolean.difference([sphere, *grooves, *cylinders])
 
+    sphere = trimesh.boolean.difference([sphere, *grooves, *cylinders])
     sphere.show()

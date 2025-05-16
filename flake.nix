@@ -20,6 +20,7 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         ./nix/overlay.nix
+        ./nix/pyright.nix
         inputs.treefmt-nix.flakeModule
       ];
 

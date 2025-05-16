@@ -4,7 +4,6 @@ import numpy as np
 import trimesh
 from trimesh.geometry import triangulate_quads
 
-from holonomy.examples.tetrahedron import tetrahedron
 from holonomy.graph import Network
 
 
@@ -169,29 +168,3 @@ def add_pegs(network: Network, pegs_config: PegsConfig, section_config: SectionC
             peg_meshes.append(peg)
 
     return peg_meshes
-
-
-if __name__ == "__main__":
-    network = tetrahedron
-    network.pegs = [(True, True) for _ in range(len(network.paths))]
-
-    sphere = trimesh.creation.icosphere(subdivisions=4, radius=0.98)
-    config = SectionConfig(
-        height=0.2,
-        width=0.35,
-        rail_height=0.1,
-        rail_width=0.06,
-        bottleneck_height=0.08,
-        bottleneck_width=0.16,
-    )
-
-    pegs_config = PegsConfig(height=0.1, radius=0.05)
-    peg_meshes = add_pegs(network, pegs_config, config)
-    sphere = trimesh.boolean.union([sphere, *peg_meshes])
-    section = create_groove_section(config)
-    grooves = construct_grooves(network, section)
-
-    cylinders = cylinder_intersections(config, network)
-
-    sphere = trimesh.boolean.difference([sphere, *grooves, *cylinders])
-    sphere.show()

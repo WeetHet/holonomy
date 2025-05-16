@@ -10,7 +10,6 @@
           (self: super: {
             python3 = super.python3.override {
               packageOverrides = pyfinal: pyprev: {
-                bezier = pyfinal.callPackage ./bezier.nix { };
                 pyglet = pyfinal.buildPythonPackage {
                   inherit (pyprev.pyglet) pname;
                   version = "1.5.31";
